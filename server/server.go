@@ -28,6 +28,8 @@ func (s *Server) serviceHandler(w http.ResponseWriter, req *http.Request) {
 	url := req.URL.String()
 	method := req.Method
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
 	s.matchURL(&w, url, method)
 }
 
