@@ -1,0 +1,59 @@
+{
+  "service": [
+    {
+      "method": "GET",
+      "path": "/api",
+      "result": {
+        "200": {
+          "json": {
+
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/hello",
+      "result": {
+        "200": {
+          "json": {
+            "condition": "good"
+          }
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api",
+      "result": {
+        "200": {
+          "json": {
+
+          }
+        }
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/api",
+      "result": {
+        "200": {
+          "json": {
+
+          }
+        }
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/api",
+      "result": {
+        "200": {
+          "json": {
+
+          }
+        }
+      }
+    }
+  ]
+}
