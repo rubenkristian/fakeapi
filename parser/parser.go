@@ -7,18 +7,21 @@ import (
 	"os"
 )
 
-type Service struct {
-	Services []Obj `json:"service"`
+type JsonFile struct {
+	Services []Obj                   `json:"service"`
+	NotFound *map[string]interface{} `json:"notfound"`
 }
 
 type Obj struct {
 	Path   string                 `json:"path"`
 	Method string                 `json:"method"`
+	Query  map[string]interface{} `json:"query"`
 	Result map[string]interface{} `json:"result"`
 }
 
 type Parser struct {
 	service   []Obj
+	NotFound  *map[string]interface{}
 	MapGET    *map[string]interface{}
 	MapPOST   *map[string]interface{}
 	MapPUT    *map[string]interface{}
@@ -36,11 +39,12 @@ func SetParser(file string) *Parser {
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	var result Service
+	var result JsonFile
 	json.Unmarshal([]byte(byteValue), &result)
 
 	return &Parser{
-		service: result.Services,
+		service:  result.Services,
+		NotFound: result.NotFound,
 	}
 }
 

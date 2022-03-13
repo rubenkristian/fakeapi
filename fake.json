@@ -2,6 +2,29 @@
   "service": [
     {
       "method": "GET",
+      "path": "/",
+      "query": {
+        "page": "<number>",
+        "size": "<number>",
+        "s": "<any>"
+      },
+      "result": {
+        "200": {
+          "json": {
+            "status": "200",
+            "data": {
+              "page": "<number>",
+              "[]list": {
+                "name": ":firstname :lastname",
+                "bio": ":lorem(20)"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
       "path": "/api",
       "result": {
         "200": {
@@ -13,7 +36,7 @@
     },
     {
       "method": "GET",
-      "path": "/hello",
+      "path": "/hello/<number>/hello/<any>/mono/<number>",
       "result": {
         "200": {
           "json": {
@@ -55,5 +78,9 @@
         }
       }
     }
-  ]
+  ],
+  "notfound": {
+    "status": "Warning",
+    "message": "Not Found Route"
+  }
 }
