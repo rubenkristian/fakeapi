@@ -71,3 +71,24 @@ func (p *Parser) RunParser() {
 	p.MapPUT = &putList
 	p.MapDELETE = &deleteList
 }
+
+type ArrayField struct {
+	Length int
+	Name   string
+}
+
+func isArray(field string) bool {
+	index := 0
+	chars := []rune(field)
+
+	if chars[index] == '[' {
+		index++
+
+	}
+
+	return false
+}
+
+func isNumber(field string) {
+
+}

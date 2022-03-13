@@ -14,7 +14,15 @@ func main() {
 func RunApplication() {
 	args := os.Args
 
-	file := args[1]
+	argc := len(args)
+
+	var file string
+
+	if argc > 1 {
+		file = args[1]
+	} else {
+		file = "fake.json"
+	}
 
 	p := parser.SetParser(file)
 
