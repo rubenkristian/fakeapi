@@ -99,8 +99,8 @@ func (s *Server) fetchURLAndMatch(urlReq string, urlMap string) bool {
 	if lenURLReq == lenURLMap {
 		var mapPart string
 		var reqPart string
-		anyReg := regexp.MustCompile(`^\w+$`)
-		numberReg := regexp.MustCompile(`^\d+$`)
+		anyReg := regexp.MustCompile(`^[a-zA-Z0-9]+$`)
+		numberReg := regexp.MustCompile(`^[0-9]+$`)
 
 		for i := 0; i < lenURLMap; i++ {
 			mapPart = urlMapSlices[i]
