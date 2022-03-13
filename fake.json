@@ -14,8 +14,8 @@
             "status": "200",
             "data": {
               "page": "<number>",
-              "[]list": {
-                "name": ":firstname :lastname",
+              "[10]list": {
+                "name": ":fullname",
                 "bio": ":lorem(20)"
               }
             }
