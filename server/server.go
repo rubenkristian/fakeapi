@@ -64,7 +64,7 @@ func (s *Server) serviceHandler(w http.ResponseWriter, req *http.Request) {
 func (s *Server) matchURL(w *http.ResponseWriter, url string, method string) {
 	p := s.parser
 
-	var mapMethod *map[string]interface{}
+	var mapMethod *map[string]parser.Fields
 
 	if method == "GET" {
 		mapMethod = p.MapGET
