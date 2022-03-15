@@ -78,8 +78,10 @@ func (s *Server) matchURL(w *http.ResponseWriter, url string, method string) {
 
 	if mapMethod != nil {
 		for u, result := range *mapMethod {
-			if s.fetchURLAndMatch(strings.Trim(url, "/"), strings.Trim(u, "/")) {
-				fmt.Fprint(*w, result)
+			isMatch, params := s.fetchURLAndMatch(strings.Trim(url, "/"), strings.Trim(u, "/"))
+			if isMatch {
+				// TODO: do something with params
+				fmt.Fprint(*w, result, params)
 				return
 			}
 		}
@@ -89,12 +91,14 @@ func (s *Server) matchURL(w *http.ResponseWriter, url string, method string) {
 	fmt.Fprint(*w, "Error matching route map")
 }
 
-func (s *Server) fetchURLAndMatch(urlReq string, urlMap string) bool {
+func (s *Server) fetchURLAndMatch(urlReq string, urlMap string) (bool, []string) {
 	urlReqSlices := strings.Split(urlReq, "/")
 	urlMapSlices := strings.Split(urlMap, "/")
 
 	lenURLReq := len(urlReqSlices)
 	lenURLMap := len(urlMapSlices)
+
+	var arrURLParam []string
 
 	if lenURLReq == lenURLMap {
 		var mapPart string
@@ -107,19 +111,20 @@ func (s *Server) fetchURLAndMatch(urlReq string, urlMap string) bool {
 			reqPart = urlReqSlices[i]
 			if isTag(mapPart) {
 				if (mapPart == "<any>" && !anyReg.MatchString(reqPart)) || (mapPart == "<number>" && !numberReg.MatchString(reqPart)) {
-					return false
+					return false, nil
 				}
+				arrURLParam = append(arrURLParam, reqPart)
 			} else {
 				if mapPart != reqPart {
-					return false
+					return false, nil
 				}
 			}
 		}
 
-		return true
+		return true, arrURLParam
 	}
 
-	return false
+	return false, nil
 }
 
 func isTag(param string) bool {

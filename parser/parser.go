@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type JsonFile struct {
@@ -133,4 +134,21 @@ func (p *Parser) isNumber(character byte) bool {
 	}
 
 	return false
+}
+
+func (p *Parser) isFunction(value string) (bool, []string) {
+	arrVal := strings.Split(value, " ")
+	lenVal := len(arrVal[0])
+
+	functionList := []string{"lorem", "fullname", "firstname", "lastname"}
+
+	if value[0] == ':' {
+		funcName := value[1:(lenVal - 1)]
+		for _, function := range functionList {
+			if function == funcName {
+				return true, arrVal[1:]
+			}
+		}
+	}
+	return false, nil
 }
