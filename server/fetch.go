@@ -3,13 +3,14 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"regexp"
 	"strings"
 
 	"github.com/rubenkristian/fakeapi/parser"
 )
 
-func (s *Server) matchURL(w *http.ResponseWriter, url string, method string) {
+func (s *Server) matchURL(w *http.ResponseWriter, query *url.Values, url string, method string) {
 	p := s.parser
 
 	var mapMethod *map[string]parser.Fields
@@ -27,7 +28,7 @@ func (s *Server) matchURL(w *http.ResponseWriter, url string, method string) {
 	if mapMethod != nil {
 		for u, result := range *mapMethod {
 			isMatch, params := s.fetchURLAndMatch(strings.Trim(url, "/"), strings.Trim(u, "/"))
-
+			// TODO: fetch result and create anonym function to give result and response to requester
 			if isMatch {
 				// TODO: do something with params
 				fmt.Fprint(*w, result)

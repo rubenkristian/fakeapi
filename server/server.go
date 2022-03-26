@@ -54,8 +54,9 @@ func (s *Server) StartServer(port string) {
 func (s *Server) serviceHandler(w http.ResponseWriter, req *http.Request) {
 	url := req.URL.String()
 	method := req.Method
+	query := req.URL.Query()
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
-	s.matchURL(&w, url, method)
+	s.matchURL(&w, &query, url, method)
 }

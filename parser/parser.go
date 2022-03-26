@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net/url"
 	"os"
 	"strconv"
 	"strings"
@@ -15,15 +16,20 @@ type JsonFile struct {
 	NotFound *map[string]interface{} `json:"notfound"`
 }
 
+type QueryProp struct {
+	Type     string `json:"type"`
+	Required bool   `json:"required"`
+}
+
 type Obj struct {
 	Path   string                 `json:"path"`
 	Method string                 `json:"method"`
-	Query  map[string]string      `json:"query"`
+	Query  map[string]QueryProp   `json:"query"`
 	Result map[string]interface{} `json:"result"`
 }
 
 type Fields struct {
-	Query    map[string]string
+	Query    map[string]QueryProp
 	Response map[string]interface{}
 }
 
@@ -151,4 +157,15 @@ func (p *Parser) isFunction(value string) (bool, []string) {
 		}
 	}
 	return false, nil
+}
+
+func (p *Parser) QueryValidation(field Fields, queries *url.Values) bool {
+	for index, query := range field.Query {
+		if !query.Required {
+			continue
+		} else if !queries.Has(index) {
+			return false
+		}
+	}
+	return true
 }
