@@ -15,13 +15,14 @@ func (s *Server) matchURL(w *http.ResponseWriter, query *url.Values, url string,
 
 	var mapMethod *map[string]parser.Fields
 
-	if method == "GET" {
+	switch method {
+	case "GET":
 		mapMethod = p.MapGET
-	} else if method == "POST" {
+	case "POST":
 		mapMethod = p.MapPOST
-	} else if method == "PUT" {
+	case "PUT":
 		mapMethod = p.MapPUT
-	} else if method == "DELETE" {
+	case "DELETE":
 		mapMethod = p.MapDELETE
 	}
 

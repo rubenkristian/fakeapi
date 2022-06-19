@@ -35,11 +35,11 @@ type Fields struct {
 
 type Parser struct {
 	service   []Obj
-	NotFound  *map[string]interface{}
 	MapGET    *map[string]Fields
 	MapPOST   *map[string]Fields
 	MapPUT    *map[string]Fields
 	MapDELETE *map[string]Fields
+	NotFound  *map[string]interface{}
 }
 
 func SetParser(file string) *Parser {
@@ -69,26 +69,31 @@ func (p *Parser) RunParser() {
 	var deleteList = make(map[string]Fields)
 
 	for _, obj := range p.service {
-		if obj.Method == "GET" {
+		switch obj.Method {
+		case "GET":
 			getList[obj.Path] = Fields{
 				Query:    obj.Query,
 				Response: obj.Result,
 			}
-		} else if obj.Method == "POST" {
+			continue
+		case "POST":
 			postList[obj.Path] = Fields{
 				Query:    obj.Query,
 				Response: obj.Result,
 			}
-		} else if obj.Method == "PUT" {
+			continue
+		case "PUT":
 			putList[obj.Path] = Fields{
 				Query:    obj.Query,
 				Response: obj.Result,
 			}
-		} else if obj.Method == "DELETE" {
+			continue
+		case "DELETE":
 			deleteList[obj.Path] = Fields{
 				Query:    obj.Query,
 				Response: obj.Result,
 			}
+			continue
 		}
 	}
 
