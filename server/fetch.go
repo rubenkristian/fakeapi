@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -32,8 +33,27 @@ func (s *Server) matchURL(w *http.ResponseWriter, query *url.Values, url string,
 			// TODO: fetch result and create anonym function to give result and response to requester
 			if isMatch {
 				// TODO: do something with params
-				fmt.Fprint(*w, result)
-				fmt.Fprint(*w, params)
+				var status = result.Response["status"].(float64)
+				var response = result.Response["response"]
+				var byteJson, err = json.Marshal(response)
+
+				if err != nil {
+					fmt.Fprint(*w, err.Error())
+				} else {
+					var stringJson = string(byteJson)
+					(*w).Header().Set("Content-Type", "application/json; charset=utf-8")
+					if status == 200 {
+						(*w).WriteHeader(http.StatusOK)
+					}
+
+					for index, param := range params {
+						var indexParam = fmt.Sprintf("${%d}", index)
+						fmt.Print(indexParam)
+						stringJson = strings.ReplaceAll(stringJson, indexParam, param)
+					}
+
+					fmt.Fprint(*w, string(stringJson))
+				}
 				return
 			}
 		}

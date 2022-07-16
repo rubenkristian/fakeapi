@@ -38,7 +38,10 @@
       "result": {
         "200": {
           "json": {
-
+            "status": "200",
+            "data": {
+              "page": "hello"
+            }
           }
         }
       }
@@ -47,10 +50,10 @@
       "method": "GET",
       "path": "/hello/<number>/hello/<any>/mono/<number>",
       "result": {
-        "200": {
-          "json": {
-            "condition": "good"
-          }
+        "status": 200,
+        "response": {
+          "condition": "good ${1}",
+          "hello": "hello ${2}"
         }
       }
     },
