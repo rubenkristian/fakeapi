@@ -2,12 +2,10 @@ package server
 
 import (
 	"fmt"
-	"log"
-	"net"
-	"net/http"
 	"sync"
 
 	"github.com/rubenkristian/fakeapi/parser"
+	"github.com/valyala/fasthttp"
 )
 
 type Server struct {
@@ -26,19 +24,12 @@ func (s *Server) StartServer(port string) {
 
 	var address string = ":" + port
 
-	listen, err := net.Listen("tcp", address)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	http.HandleFunc("/", s.serviceHandler)
 	waitGroup.Add(1)
 
 	go func() {
 		defer waitGroup.Done()
 
-		httpServerError <- http.Serve(listen, nil)
+		httpServerError <- fasthttp.ListenAndServe(address, s.serviceHandler)
 	}()
 
 	select {
@@ -51,12 +42,20 @@ func (s *Server) StartServer(port string) {
 	waitGroup.Wait()
 }
 
-func (s *Server) serviceHandler(w http.ResponseWriter, req *http.Request) {
-	url := req.URL.String()
-	method := req.Method
-	query := req.URL.Query()
+func (s *Server) serviceHandler(ctx *fasthttp.RequestCtx) {
+	path := string(ctx.Path())
+	method := string(ctx.Request.Header.Method())
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-
-	s.matchURL(&w, &query, url, method)
+	ctx.Response.Header.Set("Access-Control-Allow-Origin", "*")
+	s.fastMatchURL(ctx, path, method)
 }
+
+// func (s *Server) serviceHandler(w http.ResponseWriter, req *http.Request) {
+// 	url := req.URL.String()
+// 	method := req.Method
+// 	query := req.URL.Query()
+
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+// 	s.matchURL(&w, &query, url, method)
+// }
